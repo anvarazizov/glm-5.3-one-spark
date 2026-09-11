@@ -1,5 +1,10 @@
 # GLM-5.3-Flash on One DGX Spark
 
+> This fork adds a fail-closed hybrid-Mamba prefix-cache fix for vLLM issue
+> #55600, a conservative three-sequence production profile, and portable
+> deployment/validation instructions. See
+> [`docs/PORTABLE-DEPLOYMENT.md`](docs/PORTABLE-DEPLOYMENT.md).
+
 A reproducible, production-capable vLLM deployment of **Z.ai GLM-5.3-Flash on one NVIDIA DGX Spark**, using [Turboderp's 2.05-bpw EXL3 checkpoint](https://huggingface.co/turboderp/GLM-5.3-Flash-exl3/tree/2.05bpw) and [Inco AI's DFlash2 drafter](https://huggingface.co/incoai/GLM-5.3-Flash-DFlash2).
 
 > **64.1 tok/s structured C1 (K7) · 29.9 tok/s prose / 40.1 tok/s code (K5 default) · 181.9 tok/s C4 active-stream aggregate · 262K context**

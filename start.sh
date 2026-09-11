@@ -44,14 +44,18 @@ docker run -d --name "$CONTAINER" --gpus all --network host --ipc=host \
   -e GLM53_INDEXER_WORKSPACE=stock \
   -e GLM53_SPINWAIT_MS=stock \
   -e VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=1800 \
+  -e VLLM_API_KEY \
   -e ONE_SPARK_HOST="$HOST" -e ONE_SPARK_PORT="$PORT" -e ONE_SPARK_K="${ONE_SPARK_K:-5}" \
+  -e ONE_SPARK_MAX_NUM_SEQS="${ONE_SPARK_MAX_NUM_SEQS:-3}" \
+  -e ONE_SPARK_APC="${ONE_SPARK_APC:-1}" \
   -v "$MODEL_DIR:/model:ro" -v "$DFLASH_DIR:/draft:ro" \
   -v "$ROOT/scripts/serve-one-spark.sh:/start.sh:ro" \
+  -v "$ROOT/overlay/patch_mamba_hybrid_seed.py:/opt/glm53/patch_mamba_hybrid_seed.py:ro" \
   -v "${CACHE_ROOT:-$HOME/.cache/glm53-one-spark}/vllm:/root/.cache/vllm" \
   -v "${CACHE_ROOT:-$HOME/.cache/glm53-one-spark}/triton:/root/.triton/cache" \
   -v "${CACHE_ROOT:-$HOME/.cache/glm53-one-spark}/tilelang:/root/.tilelang/cache" \
   -v "${CACHE_ROOT:-$HOME/.cache/glm53-one-spark}/torchinductor:/tmp/torchinductor_root" \
-  --entrypoint bash "$IMAGE" /start.sh
+  --restart unless-stopped --entrypoint bash "$IMAGE" /start.sh
 
 echo "Container started. Initial API readiness takes about 3.5 minutes (was 14 before 2026-09-03)."
 echo "Follow startup: docker logs -f $CONTAINER"
